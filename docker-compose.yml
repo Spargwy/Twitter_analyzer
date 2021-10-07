@@ -1,0 +1,26 @@
+version: "3.9"
+
+services: 
+  web:
+    build: .
+    command: go run main.go
+    ports:
+        - 8900:8900
+    volumes: 
+      - .:/code
+    depends_on:
+      - "db"
+    environment:
+      - CONN=${CONN}
+      - USERNAMES=${USERNAMES}
+      - BEARER_TOKEN=${BEARER_TOKEN}
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=twitter
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+     - ${DB_PORT_IN_DOCKER}
